@@ -17,6 +17,9 @@ public class UserService {
     private UserRepo repo;
 
     @Autowired
+    private JWTService jwtService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -38,11 +41,16 @@ public class UserService {
                     )
             );
 
-    if(authentication.isAuthenticated()){
-        return "Success";
-        }
+    if(authentication.isAuthenticated()) {
 
-        return "Failed";
+        User user = repo.findByUsername(loginRequest.getUsername());
+
+        return jwtService.generateToken(
+                user.getUsername(),
+                user.getRole()
+        );
     }
 
+    return "Failed";
+}
 }
