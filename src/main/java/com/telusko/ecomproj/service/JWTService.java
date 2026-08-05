@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+
 @Service
 public class JWTService {
 
@@ -28,4 +31,32 @@ public class JWTService {
                 .signWith(key)
                 .compact();
     }
+
+    public String extractUserName(String token) {
+
+    return extractAllClaims(token).getSubject();
+
+    }
+    private Claims extractAllClaims(String token) {
+
+    return Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+
+}
+public boolean validateToken(String token, String username) {
+
+    return extractUserName(token).equals(username)
+            && !isTokenExpired(token);
+
+}
+private boolean isTokenExpired(String token) {
+
+    return extractAllClaims(token)
+            .getExpiration()
+            .before(new Date());
+
+}
 }
