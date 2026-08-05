@@ -41,13 +41,13 @@ public class UserService {
                     )
             );
 
-    if(authentication.isAuthenticated()) {
+    if(authentication.isAuthenticated()){
 
         User user = repo.findByUsername(loginRequest.getUsername());
 
         return jwtService.generateToken(
                 user.getUsername(),
-                user.getRole()
+                user.getRole().name()
         );
     }
 
