@@ -1,5 +1,6 @@
 package com.telusko.ecomproj.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class Order {
 
     private String status;
 
+    @JsonManagedReference
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL,
